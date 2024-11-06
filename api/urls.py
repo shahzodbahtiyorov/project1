@@ -1,0 +1,1 @@
+from django.urls import path, includefrom api.accounts.views import registrationapp_name = "account_api"urlpatterns = [    # Includes URLs from the accounts app    path("accounts/", include("api.accounts.urls")),    # Includes URLs from the wallet app    path("wallet/", include("api.wallet.urls")),    path("dashboard/", include("api.dashboard.urls")),]

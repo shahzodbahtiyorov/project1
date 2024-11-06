@@ -1,0 +1,31 @@
+{% extends 'index.html' %}
+{% block page_title %}{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Create New Content Type and Permission</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        
+        <h4>Create Content Type</h4>
+        <div class="form-group">
+            <label for="content_type_name">Content Type Name:</label>
+            <input type="text" class="form-control" id="content_type_name" name="content_type_name" required>
+        </div>
+
+        <h4>Create Permission</h4>
+        <div class="form-group">
+            <label for="id_name">Permission Name:</label>
+            <input type="text" class="form-control" id="id_name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="id_codename">Codename:</label>
+            <input type="text" class="form-control" id="id_codename" name="codename" required>
+        </div>
+
+        <div class="text-right mt-4">
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

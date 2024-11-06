@@ -1,0 +1,129 @@
+{% extends 'index.html' %}
+{% block page_title %} Users{% endblock %}
+{% block content %}
+
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">User Permissions</h3>
+    <div class="card-tools">
+      <form method="GET" action="#" class="form-inline">
+        <div class="input-group input-group-sm" style="width: 250px;">
+          <input type="text" name="query" class="form-control" placeholder="Search by name, email, or phone..." aria-label="Search users" value="{{ query }}">
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-default" title="Search"><i class="fas fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card-body">
+    {% if page_obj %}
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in page_obj %}
+          <tr>
+            <td>{{ user.id }}</td>
+             <td><a href="{% url 'account_api:user_role' user_id=user.pk %}">{{ user.phone_number }}</a></td>
+            <td><a href="{% url 'account_api:user_role' user_id=user.pk %}">{{ user.email }}</a></td>
+
+            <td class="project-actions text-right">
+              <a class="btn btn-primary btn-sm" href="{% url 'account_api:user_profile' user_id=user.id %}">
+                <i class="fas fa-folder"></i> View
+              </a>
+              <a class="btn btn-info btn-sm" data-toggle="modal" data-target="#editModal-{{ user.id }}">
+                <i class="fas fa-pencil-alt"></i> Edit
+              </a>
+              <a class="btn btn-danger btn-sm" href="{% url 'account_api:user_delete' user_id=user.id %}">
+                <i class="fas fa-trash"></i> Delete
+              </a>
+            </td>
+          </tr>
+
+          <!-- Modal for each user -->
+          <div class="modal fade" id="editModal-{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel-{{ user.id }}" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="editModalLabel-{{ user.id }}">Edit User: {{ user.username }}</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <form method="POST" action="{% url 'account_api:edit_user' user.id %}">
+                          {% csrf_token %}
+                          <div class="modal-body">
+                              <div class="form-group">
+                                  <label for="editPhoneNumber">Phone Number</label>
+                                  <input type="text" class="form-control" id="editPhoneNumber" name="phone_number" value="{{ user.phone_number }}" required>
+                              </div>
+                              <div class="form-group">
+                                  <label for="editEmail">Email</label>
+                                  <input type="email" class="form-control" id="editEmail" name="email" value="{{ user.email }}" required>
+                              </div>
+                              <div class="form-group">
+                                  <label for="editPassword">Password</label>
+                                  <input type="password" class="form-control" id="editPassword" name="password" value="{{ user.password }}" required>
+                              </div>
+                              <div class="form-group">
+                                  <label for="editFirstName">First Name</label>
+                                  <input type="text" class="form-control" id="editFirstName" name="first_name" value="{{ user.first_name }}">
+                              </div>
+                              <div class="form-group">
+                                  <label for="editLastName">Last Name</label>
+                                  <input type="text" class="form-control" id="editLastName" name="last_name" value="{{ user.last_name }}">
+                              </div>
+                              <div class="form-group">
+                                  <label for="editUsername">Username</label>
+                                  <input type="text" class="form-control" id="editUsername" name="username" value="{{ user.username }}">
+                              </div>
+                              <div class="form-group">
+                                  <label for="editBio">Bio</label>
+                                  <input type="text" class="form-control" id="editBio" name="bio" value="{{ user.bio }}">
+                              </div>
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Save changes</button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <!-- Pagination Controls -->
+      <div class="pagination">
+        <span class="step-links">
+          {% if page_obj.has_previous %}
+            <a href="?page=1&query={{ query }}">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}&query={{ query }}">previous</a>
+          {% endif %}
+
+          <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+          </span>
+
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&query={{ query }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}&query={{ query }}">last &raquo;</a>
+          {% endif %}
+        </span>
+      </div>
+    {% else %}
+      <p>No users found.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

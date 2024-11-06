@@ -1,0 +1,62 @@
+{% extends 'index.html' %}
+{% block page_title %}Users{% endblock %}
+{% block content %}
+
+<div class="card-body table-responsive p-0">
+    <table class="table table-hover text-nowrap">
+        <thead class="thead-light">
+            <tr>
+                <th>ID</th>
+                <th>User/Phone Number</th>
+                <th>Passport Seria</th>
+                <th>PINFL</th>
+            </tr>
+        </thead>
+        <tbody>
+        
+            {% for i in identification %}
+                <tr>
+                    <td>{{ forloop.counter0|add:identification.start_index }}</td>
+                    <td><a href="{% url 'account_api:idencation_detail' pk=i.pk %}">{{ i.user.phone_number }}</a></td>
+                    <td>{{ i.seria }}</td>
+                <td>{{ i.pinfl }}</td>
+                
+                </tr>
+                {% if forloop.last == False %}
+                    <tr class="table-divider"><td colspan="3"></td></tr>  <!-- Divider row -->
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if users.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ users.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ users.number }} of {{ users.paginator.num_pages }}.
+        </span>
+
+        {% if users.has_next %}
+            <a href="?page={{ users.next_page_number }}">next</a>
+            <a href="?page={{ users.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+<style>
+    .table-divider {
+        height: 1px; /* Adjust height for visual separation */
+        background-color: #e9ecef; /* Light grey color */
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f1f1; /* Light background on hover */
+    }
+</style>
+
+{% endblock %}

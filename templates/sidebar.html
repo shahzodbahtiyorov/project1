@@ -1,0 +1,83 @@
+
+<nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item has-treeview menu-open">
+
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'account_api:index' %}" class="nav-link ">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Dashboard</p>
+                </a>
+              </li>
+
+
+         {% if permissions.user_permission %}
+                <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="far fas fa-id-badge"></i>
+              <p>
+                Users Management
+                <i class="fas fa-angle-left right"></i>
+
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'account_api:user_page' %}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>User</p>
+                </a>
+              </li>
+
+
+              <li class="nav-item">
+                <a href="{% url 'account_api:idencations' %}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Identification </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'account_api:manage_permissions' %}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Permission Create</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="pages/layout/collapsed-sidebar.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Collapsed Sidebar</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+            {% endif %}
+
+                
+                 <li class="nav-item">
+                <a href="{% url 'account_api:users' %}" class="nav-link">
+                  <i class="far fa-user-circle"></i>
+                  <p>User</p>
+                </a>
+              </li>
+                <li class="nav-item">
+                <a href="{% url 'account_api:transcation'%}" class="nav-link {% if active == 'transcation' %}active{% endif %} ">
+                  <i class="fas  fa-exchange-alt"></i>
+                  <p>Transactions </p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+          <a href="{% url 'account_api:login' %}" class="nav-link">
+  <i class="nav-icon fas fa-sign-out-alt"></i> 
+  <p>
+    Logout
+  </p>
+</a>
+
+          </li>
+        </ul>
+      </nav>

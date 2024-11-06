@@ -1,0 +1,82 @@
+{% extends 'index.html' %}
+{% block content %}
+{% block page_title %}Transactions{% endblock %}
+
+<div class="card-body">
+    <!-- Qidiruv formasi -->
+    <form method="GET" action="" class="form-inline mb-3">
+        <input type="text" name="query" class="form-control" placeholder="Search Transactions..." aria-label="Search" value="{{ request.GET.query }}">
+        <button type="submit" class="btn btn-primary ml-2">Search</button>
+    </form>
+
+    <form method="POST" action="{% url 'account_api:transaction_delete' %}">
+        {% csrf_token %}
+        <table id="example2" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select-all"></th>
+                    <th>ID</th>
+                    <th>TR_ID</th>
+                    <th>Sender <br>Receiver</th>
+                    <th>Debit/Credit/Amount</th>
+                    <th>Debit/Credit State</th>
+                    <th>Debit/Credit/Description</th>
+                    <th>Created/Updated</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in transactions %}
+                <tr>
+                    <td><input type="checkbox" name="transaction_ids" value="{{ i.id }}"></td>
+                    <td>{{ forloop.counter0|add:transactions.start_index }}</td>
+                    <td>{{ i.sender_ext_id }}<br>{{ i.cr_ext_id }}</td>
+                    <td>{{ i.sender }}<br>{{ i.receiver }}</td>
+                    <td>{{ i.db_amount }}<br>{{ i.cr_amount }}</td>
+                    {% if i.db_state == 4 or i.db_state == 3 %}
+                        <td class="btn btn-block btn-success">{{ i.db_description }}:{{ i.db_state }}<br>{{ i.db_description }}:{{ i.cr_state }}</td>
+                    {% elif i.db_state == 0 or i.cr_state == 0 %}
+                        <td>
+                            <button class="btn btn-block btn-warning">{{ i.db_description }}: {{ i.db_state }}<br>{{ i.db_description }}: {{ i.cr_state }}</button>
+                        </td>
+                    {% else %}
+                        <td>{{ i.db_description }}:{{ i.db_state }}<br>{{ i.db_description }}:{{ i.cr_state }}</td>
+                    {% endif %}
+                    <td>{{ i.db_description }}<br>{{ i.db_description }}</td>
+                    <td>{{ i.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button type="submit" class="btn btn-danger">Delete Selected</button>
+    </form>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if transactions.has_previous %}
+                <a href="?page=1&query={{ request.GET.query }}">&laquo; first</a>
+                <a href="?page={{ transactions.previous_page_number }}&query={{ request.GET.query }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ transactions.number }} of {{ transactions.paginator.num_pages }}.
+            </span>
+
+            {% if transactions.has_next %}
+                <a href="?page={{ transactions.next_page_number }}&query={{ request.GET.query }}">next</a>
+                <a href="?page={{ transactions.paginator.num_pages }}&query={{ request.GET.query }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+<script>
+    document.getElementById('select-all').onclick = function() {
+        const checkboxes = document.querySelectorAll('input[name="transaction_ids"]');
+        for (let checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }
+    };
+</script>
+
+{% endblock %}

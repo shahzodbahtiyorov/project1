@@ -1,0 +1,33 @@
+method_request:{
+        "jsonrpc": "2.0",
+        "id": uuid.uuid4().__str__(),
+        "method": "card.register",
+        "params": {
+            "number": number,
+            "expire": expire,
+            "is_otp": is_otp
+
+        }
+method_reponse:    {
+  "jsonrpc": "2.0",
+  "result": {
+    "application_id": "TT-CR-2024-10-29T09+UUID:20c69e",
+    "ttl": 180,
+    "phone": "+998933*****10",
+    "sms_send": {
+      "message": "Request is received",
+      "status": true
+    }
+  },
+  "id": "00904fa9-f41c-4c98-83a1-777be86f3220"
+}
+method_request:{
+        "jsonrpc": "2.0",
+        "id": uuid.uuid4().__str__(),
+        "method": "card.register.confirm",
+        "params": {
+            "application_id": ext_id,
+            "code": code
+        }
+    }
+method_response:
